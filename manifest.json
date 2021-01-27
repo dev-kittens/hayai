@@ -1,7 +1,7 @@
 {
-  "name": "QuickYes",
+  "name": "Hayai",
   "version": "1.1.1",
-  "description": "Adds a thumbs up button to messages",
-  "author": "Chromus",
+  "description": "Adds a button to messages where you can react with an emoji of your choice.",
+  "author": "spiral",
   "license": "OSL-3.0"
 }

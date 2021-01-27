@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Bowser65
+ * Copyright (c) 2020 Bowser65, modified by spiral
  * Licensed under the Open Software License version 3.0
  */
 
@@ -8,40 +8,50 @@ const { findInReactTree } = require('powercord/util');
 const { inject, uninject } = require('powercord/injector');
 const { React, getModule } = require('powercord/webpack');
 
-module.exports = class QuickYes extends Plugin {
-  async startPlugin () {
-    const classes = {
-      ...await getModule([ 'icon', 'isHeader' ]),
-      ...await getModule([ 'button', 'separator', 'wrapper' ])
-    };
-    const reactionManager = await getModule([ 'addReaction' ]);
-    const MiniPopover = await getModule(m => m.default && m.default.displayName === 'MiniPopover');
-    inject('yes-button', MiniPopover, 'default', (_, res) => {
-      const props = findInReactTree(res, r => r && r.canReact && r.message);
-      if (!props || props.message.reactions.find(r => r.emoji.name === '👍' && r.me)) {
-        return res;
-      }
+const Settings = require("./Settings");
+const powercord = require('powercord/');
 
-      res.props.children.unshift(React.createElement(
-        'div', {
-          className: classes.button,
-          onClick: () => reactionManager.addReaction(props.channel.id, props.message.id, {
-            animated: false,
-            name: '👍',
-            id: null
-          })
-        },
-        React.createElement('img', {
-          className: `emoji ${classes.icon}`,
-          src: '/assets/08c0a077780263f3df97613e58e71744.svg'
-        })
-      ));
-      return res;
-    });
-    MiniPopover.default.displayName = 'MiniPopover';
+module.exports = class Hayai extends Plugin {
+  async startPlugin() {
+
+	powercord.api.settings.registerSettings('hayai', {
+		category: this.entityID,
+		label: 'Hayai',
+		render: Settings
+	});
+
+	const classes = {
+	  ...await getModule([ 'icon', 'isHeader' ]),
+	  ...await getModule([ 'button', 'separator', 'wrapper' ])
+	};
+	const reactionManager = await getModule([ 'addReaction' ]);
+	const MiniPopover = await getModule(m => m.default && m.default.displayName === 'MiniPopover');
+
+	inject('hayai-button', MiniPopover, 'default', (_, res) => {
+		const props = findInReactTree(res, r => r && r.canReact && r.message);
+		if (!props || props.message.reactions.find(r => r.emoji.name === this.settings.get('emoji') && r.me) || !this.settings.get('emoji'))
+			return res;
+
+	  	res.props.children.unshift(
+			React.createElement('div', {
+				className: classes.button,
+				onClick: () => reactionManager.addReaction(props.channel.id, props.message.id, {
+				animated: false,
+				name: this.settings.get('emoji'),
+				id: null
+				})
+			},
+			React.createElement('img', { className: `emoji ${classes.icon}` })
+		  ));
+		  
+	  	return res;
+	});
+
+	MiniPopover.default.displayName = 'MiniPopover';
   }
 
-  pluginWillUnload () {
-    uninject('yes-button');
-  }
+	pluginWillUnload() {
+		uninject('hayai-button');
+		powercord.api.settings.unregisterSettings('hayai');
+	}
 };
