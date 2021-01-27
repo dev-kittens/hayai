@@ -9,7 +9,6 @@ const { inject, uninject } = require('powercord/injector');
 const { React, getModule } = require('powercord/webpack');
 
 const Settings = require("./Settings");
-const powercord = require('powercord/');
 
 module.exports = class Hayai extends Plugin {
   async startPlugin() {
