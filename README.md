@@ -4,5 +4,5 @@
 
 ## Credit
 
-Originaly made by @cyyynthia
+Originaly made by [@cyyynthia](https://github.com/cyyynthia)
 Modified by me
