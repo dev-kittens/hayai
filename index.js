@@ -33,7 +33,7 @@ module.exports = class QuickYes extends Plugin {
         },
         React.createElement('img', {
           className: `emoji ${classes.icon}`,
-          src: '/assets/e4d52f4d69d7bba67e5fd70ffe26b70d.svg'
+          src: '/assets/08c0a077780263f3df97613e58e71744.svg'
         })
       ));
       return res;
