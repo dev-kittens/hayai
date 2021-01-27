@@ -4,4 +4,5 @@
 
 ## Credit
 
-Originaly made by @cynthiaaa
+Originaly made by @cyyynthia
+Modified by me
